@@ -1,3 +1,5 @@
+#! /bin/bash
+
 #User is added to kvm group, without it service will not start without user login.
       sudo usermod -a -G kvm $USER
 #writes the service
