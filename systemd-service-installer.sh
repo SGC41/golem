@@ -1,10 +1,12 @@
 #! /bin/bash
-
+#GolemSP systemd installer v1.3
+#Now with automatic daily service restarts
+#
 #User is added to kvm group, without it service will not start without user login.
       sudo usermod -a -G kvm $USER
 #writes the service
       sudo bash -c "cat << 'EOF' > /usr/lib/systemd/system/golemsp.service
-#Installed by golemsp-systemd.updater.sh v1.1
+#Installed by golemsp-systemd.updater.sh v1.3
 [Unit]
  Description=Start GolemSP
  After=network-online.target
@@ -14,8 +16,12 @@
 [Service]
  Type=simple
  Restart=on-failure
+#RuntimeMaxSec sets the service restart period, Takes a unit-less value in seconds, or a time span value such as 1day 1hour 5min 20s
+ RuntimeMaxSec=1day
+#Environment defines the ip and port golemsp should listen on
+#Environment=YA_NET_BIND_URL=udp://0.0.0.0:11503
 #Default RestartSec is 100ms and can take up measurable system resources
- RestartSec=900
+ RestartSec=10
 #Fix for no file descriptors errors for hosts with more than 104 threads
 LimitNOFILE=65536
 #Keeps service from timing out.
@@ -55,4 +61,3 @@ EOF"
                    echo "       journalctl -u golemsp --lines=20 --follow"
                    echo " "
                    echo " "
-				   
